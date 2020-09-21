@@ -1,0 +1,19 @@
+#compdef smbget
+
+_arguments \
+	{'(--workgroup)-w','(-w)--workgroup'}'[Workgroup to use (optional)]:type workgroup:()' \
+	{'(--user)-U','(-U)--user'}'[Username to use]:select username:_users' \
+	{'(--guest)-a','(-a)--guest'}'[Work as user guest]' \
+	{'(--nonprompt)-n','(-n)--nonprompt'}'[Do not ask anything (non-interactive)]' \
+	{'(--debuglevel)-d','(-d)--debuglevel'}'[Debuglevel to use]:type debuglevel:()' \
+	{'(--encrypt)-e','(-e)--encrypt'}'[Encrypt SMB transport]' \
+	{'(--resume)-r','(-r)--resume'}'[Automatically resume aborted files]' \
+	{'(--update)-u','(-u)--update'}'[Download only when remote file is newer than local file or local file is missing]' \
+	{'(--recursive)-R','(-R)--recursive'}'[Recursively download files]' \
+	{'(--blocksize)-b','(-b)--blocksize'}'[Change number of bytes in a block]:type blocksize:()' \
+	{'(--outputfile)-o','(-o)--outputfile'}'[Write downloaded data to specified file]:select file:_files' \
+	{'(--stdout)-O','(-O)--stdout'}'[Write data to stdout]' \
+	{'(--dots)-D','(-D)--dots'}'[Show dots as progress indication]' \
+	{'(--quiet)-q','(-q)--quiet'}'[Be quiet]' \
+	{'(--verbose)-v','(-v)--verbose'}'[Be verbose]' \
+	{'(--rcfile)-f','(-f)--rcfile'}'[Use specified rc file]:select rcfile:_files'

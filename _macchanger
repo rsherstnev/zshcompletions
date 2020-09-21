@@ -1,0 +1,12 @@
+#compdef macchanger
+
+_arguments \
+	'(-s --show)'{-s,--show}'[Print the MAC address and exit]' \
+	'(-e --ending)'{-e,--ending}'[Set random MAC without changing the vendor bytes]' \
+	'(-a --another)'{-a,--another}'[Set random vendor MAC of the same kind]' \
+	'-A[Set random vendor MAC of any kind]' \
+	'(-p --permanent)'{-p,--permanent}'[Reset to original, permanent hardware MAC]' \
+	'(-r --random)'{-r,--random}'[Set fully random MAC]' \
+	'(-l --list)'{-l,--list}'[Print known vendors]:()' \
+	'(-b --bia)'{-b,--bia}'[Pretend to be a burned-in-address]' \
+	'(-m --mac)'{-m,--mac}'[Set the MAC XX:XX:XX:XX:XX:XX]:()'

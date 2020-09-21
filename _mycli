@@ -1,0 +1,34 @@
+#compdef mycli
+
+_arguments \
+	'(-h --host)'{-h,--host}'[Host address of the database]:select hostname:_hosts -X "Select host or enter address manually"' \
+	'(-P --port)'{-P,--port}'[Port number to use for connection. Honors $MYSQL_TCP_PORT]:select port:_ports -X "Select port for protocol name or enter it manually"' \
+	'(-u --user)'{-u,--user}'[User name to connect to the database]:select user:_users -X "Select user or enter username manually"' \
+	'(-S --socket)'{-S,--socket}'[The socket file to use for connection]:select socket:_files' \
+	'(-p --password)'{-p,--password}'[Password to connect to the database]:enter password:()' \
+	'--ssh-user[User name to connect to ssh server]:select user:_users -X "Select user or enter username manually"' \
+	'--ssh-host[Host name to connect to ssh server]:select hostname:_hosts -X "Select host or enter address manually"' \
+	'--ssh-port[Port to connect to ssh server]:select port:_ports -X "Select port for protocol name or enter it manually"' \
+	'--ssh-password[Password to connect to ssh server]:enter password:()' \
+	'--ssh-key-filename[Private key filename for the ssh connection]:select private key filename:_files' \
+	'--ssl-ca[CA file in PEM format]:select CA file:_files' \
+	'--ssl-capath[CA directory]:select CA directory:_files -/' \
+	'--ssl-cert[X509 cert in PEM format]:select cert:_files' \
+	'--ssl-key[X509 key in PEM format]:select key:_files' \
+	'--ssl-cipher[SSL cipher to use]:enter cipher:()' \
+	"--ssl-verify-server-cert[Verify server's 'Common Name' in its cert against hostname used when connecting]" \
+	'(-v --verbose)'{-v,--verbose}'[Verbose output]' \
+	'(-D --database)'{-D,--database}'[Database to use]:enter database:()' \
+	'(-d --dsn)'{-d,--dsn}'[Use DSN configured into the \[alias_dsn\] section of myclirc file]:enter DSN:()' \
+	'--list-dsn[list of DSN configured into the \[alias_dsn\] section of myclirc file]' \
+	'(-l --logfile)'{-l,--logfile}'[Log every query and its results to a file]:select log file:_files' \
+	'--defaults-group-suffix[Read MySQL config groups with the specified suffix]:enter suffix:()' \
+	'--defaults-file[Only read MySQL options from the given file]:select file:_files' \
+	'--myclirc[Location of myclirc file]:select myclirc file:_files' \
+	'--auto-vertical-output[Automatically switch to vertical output mode if the result is wider than the terminal width]' \
+	'(-t --table)'{-t,--table}'[Display batch output in table format]' \
+	'--csv[Display batch output in CSV format]' \
+	'--warn[Warn before running a destructive query]' \
+	'--local-infile[Enable/disable LOAD DATA LOCAL INFILE]:enable or disable:_values bool_val true false' \
+	'--login-path[Read this path from the login file]:enter login path:()' \
+	'(-e --execute)'{-e,--execute}'[Execute command and quit]:enter command:()'

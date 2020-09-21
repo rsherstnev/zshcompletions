@@ -1,0 +1,84 @@
+#compdef ncat
+
+_ncat_arglist=(
+	'-4[Use IPv4 only]'
+	'-6[Use IPv6 only]'
+	'(-U --unixsock)'{-U,--unixsock}'[Use Unix domain sockets only]'
+	'--vsock[Use vsock sockets only]'
+	'(-C --crlf)'{-C,--crlf}'[Use CRLF for EOL sequence]'
+	'(-c --sh-exec)'{-c,--sh-exec}'[Executes the given command via /bin/sh]:enter command:()'
+	'(-e --exec)'{-e,--exec}'[Executes the given command]:enter command:()'
+	'--lua-exec[Executes the given Lua script]:select Lua script:_files'
+	'-g[Loose source routing hop points (8 max) hop1\[,hop2,...\]]:enter hops:()'
+	'-G[Loose source routing hop pointer (4, 8, 12, ...)]:enter pointer:()'
+	'(-m --max-conns)'{-m,--max-conns}'[Maximum <n> simultaneous connections]:enter amount of connections:()'
+	'(-d --delay)'{-d,--delay}'[Wait between read/writes in seconds]:enter delay:->time'
+	'(-o --output)'{-o,--output}'[Dump session data to a file]:select file:_files -X "Select output file or enter filename manually"'
+	'(-x --hex-dump)'{-x,--hex-dump}'[Dump session data as hex to a file]:select file:_files -X "Select output file or enter filename manually"'
+	'(-i --idle-timeout)'{-i,--idle-timeout}'[Idle read/write timeout]:enter timeout:->time'
+	'(-p --source-port)'{-p,--source-port}'[Specify source port to use]:select port:_ports -X "Select port for protocol name or enter it manually"'
+	'(-s --source)'{-s,--source}"[Specify source address to use (doesn't affect -l)]:enter address:()"
+	'(-l --listen)'{-l,--listen}'[Bind and listen for incoming connections]'
+	'(-k --keep-open)'{-k,--keep-open}'[Accept multiple connections in listen mode]'
+	'(-n --nodns)'{-n,--nodns}'[Do not resolve hostnames via DNS]'
+	'(-t --telnet)'{-t,--telnet}'[Answer Telnet negotiations]'
+	'(-u --udp)'{-u,--udp}'[Use UDP instead of default TCP]'
+	'--sctp[Use SCTP instead of default TCP]'
+	'(-v --verbose)'{-v,--verbose}'[Set verbosity level (can be used several times)]'
+	'(-w --wait)'{-w,--wait}'[Connect timeout]:enter timeout:->time'
+	'-z[Zero-I/O mode, report connection status only]'
+	'--append-output[Append rather than clobber specified output files]'
+	'--send-only[Only send data, ignoring received; quit on EOF]'
+	'--recv-only[Only receive data, never send anything]'
+	'--no-shutdown[Continue half-duplex when receiving EOF on stdin]'
+	'--allow[Allow only given hosts to connect to ncat]:enter hosts:()'
+	'--allowfile[A file of hosts allowed to connect to ncat]:select file:_files'
+	'--deny[Deny given hosts from connecting to ncat]:enter hosts:()'
+	'--denyfile[A file of hosts denied from connecting to ncat]:select file:_files'
+	"--broker[Enable ncat's connection brokering mode]"
+	'--chat[Start a simple ncat chat server]'
+	'--proxy[Specify address of host to proxy through in format address:port (e.g. localhost:8080)]:enter proxy:()'
+	'--proxy-type[Specify proxy type ("http", "socks4", "socks5")]:select proxy type:_values proxy_type http socks4 socks5'
+	'--proxy-auth[Credentials to proxy auth in format user\[:pass\]]:enter creds:()'
+	'--proxy-dns[Specify where to resolve proxy destination]:select place:->dns_place'
+	'--ssl[Connect or listen with SSL]'
+	'--ssl-cert[Specify SSL certificate file for listening]:select cert:_files'
+	'--ssl-key[Specify SSL private key for listening]:select private key:_files'
+	'--ssl-verify[Verify trust and domain name of certificates]'
+	'--ssl-trustfile[PEM file containing trusted SSL certificates]:select PEM file:_files'
+	'--ssl-ciphers[Cipherlist containing SSL ciphers to use]:enter ciphers:()'
+	'--ssl-alpn[ALPN protocol list to use]:enter comma separated protocols:()'
+)
+
+time_msg='Seconds if suffix omitted. Append:
+ms - for milliseconds
+s  - for seconds
+m  - for minutes
+h  - for hours
+
+Example: 500ms'
+
+dns_places=(
+	'local[Hostnames are resolved locally on the ncat host. Ncat exits with error if the hostname cannot be resolved]'
+	'remote[Hostnames are passed directly onto the remote proxy server. This is the default behavior]'
+	'both[Hostname resolution is first attempted on the ncat host. Unresolvable hostnames are passed onto the remote proxy server]'
+	'none[Hostname resolution is completely disabled. Only a literal IPv4 or IPv6 address can be used as the proxy destination]'
+)
+
+_ncat() {
+	_arguments $_ncat_arglist
+	case "$state" in
+		time)
+			_message -r $time_msg
+			;;
+		dns_place)
+			_values place $dns_places
+			;;
+	esac
+}
+
+case "$service" in
+	ncat)
+		_ncat "$@" && return 0
+		;;
+esac

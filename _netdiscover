@@ -1,0 +1,18 @@
+#compdef netdiscover
+
+_arguments \
+	'-i[Network interface to use]:select interface:_net_interfaces' \
+	'-r[Range to scan instead of auto scan (e.g. 192.168.6.0/24)]:()' \
+	'-l[Scan the list of ranges contained into the given file]:select file:_files' \
+	'-p[Passive mode (do not send anything, only sniff)]' \
+	'-m[Scan a list of known MACs and host names]:select file:_files' \
+	'-F[Customize pcap filter expression (default: "arp")]:()' \
+	'-s[Time to sleep between each ARP request (milliseconds)]:()' \
+	'-c[Number of times to send each ARP request (for nets with packet loss)]:()' \
+	'-n[Last source IP octet used for scanning (from 2 to 253)]:()' \
+	'-d[Ignore home config files for autoscan and fast mode]' \
+	'-f[Enable fastmode scan (saves a lot of time, recommended for auto)]' \
+	'-P[Print results in a format suitable for parsing by another program and stop after active scan]' \
+	'-L[Similar to -P but continue listening after the active scan is completed]' \
+	'-N[Do not print header. Only valid when -P or -L is enabled]' \
+	'-S[Enable sleep time suppression between each request (hardcore mode)]'

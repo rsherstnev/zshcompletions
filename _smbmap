@@ -1,0 +1,31 @@
+#compdef smbmap
+
+_arguments \
+	'-H[Host IP]:()' \
+	'--host-file[File, containing a list of hosts]:select file:_files' \
+	'-u[Username, if omitted null session assumed]:type user:_users' \
+	'-p[Password or NTLM hash]:()' \
+	'-s[Specify a share (default: C$)]:()' \
+	'-d[Domain name (default: WORKGROUP)]:()' \
+	'-P[SMB port (default: 445)]:()' \
+	'-v[Return the OS version of the remote host]' \
+	'--admin[Just report if the user is an admin]' \
+	'-x[Execute a command, for example, ipconfig /all]:()' \
+	'--mode[Set the execution method, wmi or psexec (default: wmi)]:select execution method:_values method wmi psexec' \
+	'-L[List all drives on the specified host]' \
+	'-R[Recursively list dirs, and files (no share\path lists == ALL shares)]:()' \
+	'-r[List contents of directory (default: root of all shares)]:()' \
+	'-A[Define a file name pattern that auto downloads a file on a match (requires -R or -r), not case sensitive]:()' \
+	'-g[Make the output grep friendly, used with -r or -R (otherwise it outputs nothing)]' \
+	'--dir-only[List only directories, ommit files]' \
+	'--no-write-check[Skip check to see if drive grants WRITE access]' \
+	'-q[Quiet verbose output. Only shows shares you have READ or WRITE on, and suppresses file listing when performing a search (-A)]' \
+	'--depth[Traverse a directory tree to a specific depth (default: 5)]:()' \
+	'--exclude[Exclude share(s) from searching and listing]:()' \
+	'-F[File content search (requires admin access to execute commands, and PowerShell on victim host)]:()' \
+	'--search-path[Specify drive/path to search, used with -F (default: C:\Users)]:()' \
+	'--search-timeout[Specifcy a timeout (in seconds) before the file search job gets killed (default: 300)]:()' \
+	'--download[Download a file from the remote system]:()' \
+	'--upload[Upload a file to the remote system]:select file:_files' \
+	'--delete[Delete a remote file]:()' \
+	'--skip[Skip delete file confirmation prompt]'

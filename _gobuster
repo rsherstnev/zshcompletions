@@ -1,0 +1,152 @@
+#compdef gobuster
+
+local http_codes args ret=1
+typeset -A opt_args
+
+_arguments -C \
+	'1:select mode:->mode' \
+	'*:: :->args' \
+&& ret=0
+
+http_codes=(
+	'100[Continue]'
+	'101[Switching Protocols]'
+	'102[Processing]'
+	'200[OK]'
+	'201[Created]'
+	'202[Accepted]'
+	'203[Non-Authoritative Information]'
+	'204[No Content]'
+	'205[Reset Content]'
+	'206[Partial Content]'
+	'207[Multi-Status]'
+	'208[Already Reported]'
+	'226[IM Used]'
+	'300[Multiple Choices]'
+	'301[Moved Permanently]'
+	'302[Found]'
+	'303[See Other]'
+	'304[Not Modified]'
+	'305[Use Proxy]'
+	'307[Temporary Redirect]'
+	'308[Permanent Redirect]'
+	'400[Bad Request]'
+	'401[Unauthorized]'
+	'402[Payment Required]'
+	'403[Forbidden]'
+	'404[Not Found]'
+	'405[Method Not Allowed]'
+	'406[Not Acceptable]'
+	'407[Proxy Authentication Required]'
+	'408[Request Timeout]'
+	'409[Conflict]'
+	'410[Gone]'
+	'411[Length Required]'
+	'412[Precondition Failed]'
+	'413[Payload Too Large]'
+	'414[URI Too Long]'
+	'415[Unsupported Media Type]'
+	'416[Range Not Satisfiable]'
+	'417[Expectation Failed ]'
+	'418[I’m a teapot]'
+	'419[Authentication Timeout]'
+	'421[Misdirected Request]'
+	'422[Unprocessable Entity]'
+	'423[Locked]'
+	'424[Failed Dependency]'
+	'426[Upgrade Required]'
+	'428[Precondition Required]'
+	'429[Too Many Requests]'
+	'431[Request Header Fields Too Large]'
+	'449[Retry With]'
+	'451[Unavailable For Legal Reasons]'
+	'499[Client Closed Request]'
+	'500[Internal Server Error]'
+	'501[Not Implemented]'
+	'502[Bad Gateway]'
+	'503[Service Unavailable]'
+	'504[Gateway Timeout]'
+	'505[HTTP Version Not Supported]'
+	'506[Variant Also Negotiates]'
+	'507[Insufficient Storage]'
+	'508[Loop Detected]'
+	'509[Bandwidth Limit Exceeded ]'
+	'510[Not Extended]'
+	'511[Network Authentication Required]'
+	'520[Unknown Error]'
+	'521[Web Server Is Down]'
+	'522[Connection Timed Out]'
+	'523[Origin Is Unreachable]'
+	'524[A Timeout Occurred]'
+	'525[SSL Handshake Failed]'
+	'526[Invalid SSL Certificate]'
+)
+
+case "$state" in
+	(mode)
+		_values gobuster_mode dir vhost dns && ret=0
+	;;
+	(args)
+		args=(
+			'(-z --noprogress)'{-z,--noprogress}'[Do not display progress]'
+			'(-o --output)'{-o,--output}'[Output file to write results to (default: to stdout)]:select file:_files'
+			'(-q --quiet)'{-q,--quiet}'[Do not print the banner and other noise]'
+			'(-t --threads)'{-t,--threads}'[Number of concurrent threads (default: 10)]:enter number of threads:()'
+			'(-v --verbose)'{-v,--verbose}'[Verbose output (errors)]'
+			'(-w --wordlist)'{-w,--wordlist}'[Path to the wordlist]:select wordlist:_files'
+		)
+		case $line[1] in
+			(dir)
+				args+=(
+					'(-f --addslash)'{-f,--addslash}'[Apped "/" to each request]'
+					'(-c --cookies)'{-c,--cookies}'[Cookies to use for the requests]:enter cookies:()'
+					'(-e --expanded)'{-e,--expanded}'[Expanded mode, print full URLs]'
+					'(-x --extensions)'{-x,--extensions}'[File extension(s) to search for]:enter comma separated extension(s):()'
+					'(-r --followredirect)'{-r,--followredirect}'[Follow redirects]'
+					'(-H --headers)'{-H,--headers}'[Specify HTTP headers, -H "Header1: val1" -H "Header2: val2"]:enter headers:()'
+					'(-l --includelength)'{-l,--includelength}'[Include the length of the body in the output]'
+					'(-k --insecuressl)'{-k,--insecuressl}'[Skip SSL certificate verification]'
+					'(-n --nostatus)'{-n,--nostatus}'[Do not print status codes]'
+					'(-P --password)'{-P,--password}'[Password for Basic Auth]:enter password:()'
+					'(-p --proxy)'{-p,--proxy}'[Proxy to use for requests \[http(s)://host:port\]]:enter proxy:()'
+					'(-s --statuscodes)'{-s,--statuscodes}'[Positive status codes, will be overwritten with statuscodesblacklist if set (default: "200,204,301,302,307,401,403")]:select positive status codes:_values -s "," $http_codes'
+					'(-b --statuscodesblacklist)'{-b,--statuscodesblacklist}'[Negative status codes, will override statuscodes if set]:select negative status codes:_values -s "," $http_codes'
+					'--timeout[HTTP Timeout (default: 10s)]:enter duration:()'
+					'(-u --url)'{-u,--url}'[The target URL]:enter url:()'
+					'(-a --useragent)'{-a,--useragent}'[Set the User-Agent string (default: "gobuster/3.0.1")]:enter useragent:()'
+					'(-U --username)'{-U,--username}'[Username for Basic Auth]:enter username:()'
+					'--wildcard[Force continued operation when wildcard found]'
+				)
+				_arguments $args && ret=0
+				;;
+			(vhost)
+				args+=(
+					'(-c --cookies)'{-c,--cookies}'[Cookies to use for the requests]:enter cookies:()'
+					'(-r --followredirect)'{-r,--followredirect}'[Follow redirects]'
+					'(-H --headers)'{-H,--headers}'[Specify HTTP headers, -H "Header1: val1" -H "Header2: val2"]:enter headers:()'
+					'(-k --insecuressl)'{-k,--insecuressl}'[Skip SSL certificate verification]'
+					'(-P --password)'{-P,--password}'[Password for Basic Auth]:enter password:()'
+					'(-p --proxy)'{-p,--proxy}'[Proxy to use for requests \[http(s)://host:port\]]:enter proxy:()'
+					'--timeout[HTTP Timeout (default: 10s)]:enter duration:()'
+					'(-u --url)'{-u,--url}'[The target URL]:enter url:()'
+					'(-a --useragent)'{-a,--useragent}'[Set the User-Agent string (default: "gobuster/3.0.1")]:enter useragent:()'
+					'(-U --username)'{-U,--username}'[Username for Basic Auth]:enter username:()'
+				)
+				_arguments $args && ret=0
+				;;
+			(dns)
+				args+=(
+					'(-d --domain)'{-d,--domain}'[The target domain]:enter domain:()'
+					'(-r --resolver)'{-r,--resolver}'[Use custom DNS server (format server.com or server.com:port)]:enter resolver:()'
+					'(-c --showcname)'{-c,--showcname}'[Show CNAME records (cannot be used with "-i" option)]'
+					'(-i --showips)'{-i,--showips}'[Show IP addresses]'
+					'--timeout[DNS resolver timeout (default: 1s)]:enter duration:()'
+					'--wildcard[Force continued operation when wildcard found]'
+				)
+				_arguments $args && ret=0
+				;;
+		esac
+	;;
+esac
+
+return ret

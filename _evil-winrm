@@ -1,0 +1,15 @@
+#compdef evil-winrm
+
+_arguments \
+	'(-S --ssl)'{-S,--ssl}'[Enable ssl]' \
+	'(-c --pub-key)'{-c,--pub-key}'[Local path to public key certificate]:select file:_files' \
+	'(-k --priv-key)'{-k,--priv-key}'[Local path to private key certificate]:select file:_files' \
+	'(-r --realm)'{-r,--realm}'[Kerberos auth, it has to be set also in /etc/krb5.conf file if format: CONTOSO.COM = { kdc = fooserver.contoso.com }]:()' \
+	'(-s --scripts)'{-s,--scripts}'[Powershell scripts local path]:select dir:_files -/' \
+	'(-e --executables)'{-e,--executables}'[C# executables local path]:select dir:_files -/' \
+	'(-i --ip)'{-i,--ip}'[Remote host IP or hostname. FQDN for Kerberos auth]:()' \
+	'(-U --url)'{-U,--url}'[Remote url endpoint (default: /wsman)]:()' \
+	'(-u --user)'{-u,--user}'[Username]:()' \
+	'(-p --password)'{-p,--password}'[Password]:()' \
+	'(-H --hash)'{-H,--hash}'[NTHash]:()' \
+	'(-P --port)'{-P,--port}'[Remote host port (default: 5985)]:()'

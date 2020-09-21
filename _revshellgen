@@ -1,0 +1,9 @@
+#compdef revshellgen.py
+
+local types=('netcat' 'bash' 'file' 'python' 'awk' 'lua' 'php' 'perl' 'ruby' 'socat' 'openssl')
+
+_arguments -C \
+	'1:select address:_hosts' \
+	'2:select port:_ports' \
+	'3:select reverse shell type:_values type $types' \
+&& return 0

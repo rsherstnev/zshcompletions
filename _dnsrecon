@@ -1,0 +1,34 @@
+#compdef dnsrecon
+
+local types=(
+	'axfr[Zone transfer]'
+	'brt[Brute-force]'
+	'snoop[Cache snooping]'
+	'zonewalk[Zone walking]'
+)
+
+_arguments \
+	'(-d --domain)'{-d,--domain}'[Target domain]:()' \
+	'(-n --name_server)'{-n,--name_server}'[Comma separated domain servers to use. If none is given, the SOA of the target will be used]:()' \
+	'(-r --range)'{-r,--range}'[IP range for reverse lookup brute force in formats first-last or range/bitmask]:()' \
+	'(-D --dictionary)'{-D,--dictionary}'[Dictionary file of subdomain and hostnames to use for brute force]:select file:_files' \
+	'-v[Enable verbose]' \
+	'-f[Filter out of brute force domain lookup, records that resolve to the wildcard defined IP address when saving records]' \
+	'(-t --type)'{-t,--type}'[Type of enumeration to perform]:select type:_values type $types' \
+	'-a[Perform AXFR with standard enumeration]' \
+	'-s[Perform a reverse lookup of IPv4 ranges in the SPF record with standard enumeration]' \
+	'-g[Perform Google enumeration with standard enumeration]' \
+	'-b[Perform Bing enumeration with standard enumeration]' \
+	'-k[Perform crt.sh enumeration with standard enumeration]' \
+	'-w[Perform deep whois record analysis and reverse lookup of IP ranges found through Whois when doing a standard enumeration]' \
+	'-z[Performs a DNSSEC zone walk with standard enumeration]' \
+	'--threads[Number of threads to use in reverse lookups, forward lookups, brute force and SRV record enumeration]:()' \
+	'--lifetime[Time to wait for a server to response to a query]:enter time:()' \
+	'--tcp[Use TCP protocol to make queries]' \
+	'--db[SQLite 3 file to save found records]:select file:_files' \
+	'(-x --xml)'{-x,--xml}'[XML file to save found records]:select file:_files' \
+	'(-c --csv)'{-c,--csv}'[Comma separated value file]:select file:_files' \
+	'(-j --json)'{-j,--json}'[JSON file]:select file:_files' \
+	'--iw[Continue brute forcing a domain even if a wildcard records are discovered]' \
+	'--disable_check_recursion[Disables check for recursion on name servers]' \
+	'--disable_check_bindversion[Disables check for BIND version on name servers]'

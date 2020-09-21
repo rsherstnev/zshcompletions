@@ -1,0 +1,331 @@
+#compdef wfuzz
+
+_wfuzz_arglist=(
+	"--filter-help[Display filter language specification]"
+	"-e[Display list of available modules selected type]:select type of modules:->modules_type"
+	"*--recipe[Read options from a recipe. Repeat for various recipes]:select file:_files"
+	"--dump-recipe[Dump current options as a recipe]:enter filename:_files"
+	"-c[Output with colors]"
+	"-v[Verbose output]"
+	"-f[Save results in file using the specified printer (default: raw) in format: filename,printer]:enter filename and printer:->file_and_printer"
+	"-o[Show results using the specified printer]:select printer:->printer"
+	"--interact[If selected, all key presses are captured. This allows you to interact with the program]"
+	"--dry-run[Print the results of applying the requests without actually making any HTTP request]"
+	"--prev[Print the previous HTTP requests (only when using payloads generating fuzzresults)]"
+	"--efield[Show the specified language expression together with the current payload]:enter expression:()"
+	"--field[Do not show the payload but show only the specified language expression]:enter expression:()"
+	"*-p[Proxy address in format: ip:port\[:type\]. Repeat option for using various proxies]:enter proxy address:->proxy"
+	"-t[Number of concurrent connections (default: 10)]:enter number of threads:()"
+	"-s[Time delay between requests (default: 0)]:enter delay:()"
+	"-R[Recursive path discovery being depth the maximum recursion level]:enter depth:()"
+	{"(--follow)-L","(-L)--follow "}"[Follow HTTP redirections]"
+	"--ip[IP to connect instead of the URL's host in the format: ip:port]:enter host and port:()"
+	"-Z[Scan mode (connection errors will be ignored)]"
+	"--req-delay[Maximum time in seconds the request is allowed to take (default: 90)]:enter request delay:()"
+	"--conn-delay[Maximum time in seconds the connection phase to the server to take (default: 90)]:enter connection delay:()"
+	"--no-cache[Disable plugins cache. Every request will be scanned]"
+	"--script[Run script's scan. Argument is a comma separated list of plugin-files or plugin-categories]:select scripts:->scripts"
+	"--script-help[Display help about selected scripts]:select scripts:->scripts"
+	'--script-args[Arguments for specified scripts]:enter script args:->scripts_args'
+	"-u[URL for the request]:enter URL:()"
+	"-m[Iterator for combining payloads (default: product)]:select iterator:->iterator"
+	"*-z[Payload for each FUZZ keyword used in the form of: name\[,parameter\]\[,encoder\]]:select payload:->payload"
+	"*-w[Wordlist file (alias for -z file,wordlist)]:select wordlist:_files"
+	"*--zP[Arguments for the specified payload. It must be preceded by -z or -w]:select payload params:->payload_params"
+	"*--zD[Default parameter value for the specified payload. It must be preceded by -z or -w]:enter value of default payload parameter:->payload_default_param"
+	"*--zE[Encoders for the specified payload. It must be preceded by -z or -w]:select payload encoders:->encoders"
+	"--slice[Filter payload's elements using the specified expression. It must be preceded by -z or -w]:enter filter:()"
+	"-V[What parameters bruteforcing. No need for FUZZ keyword]:select parameters type:->parameters_type"
+	"-X[HTTP method for the request, ie. HEAD or FUZZ]:select HTTP method:->http_method"
+	"-b[Cookie header for the requests]:enter cookie:()"
+	"-d[POST data]:enter POST data:()"
+	"*-H[HTTP header. Repeat option for various headers]:enter header:()"
+	"--basic[Basic authentication in format \[DOMAIN\\\\\]USER:PASS]:enter credentials:()"
+	"--ntlm[NTLM authentication in format \[DOMAIN\\\\\]USER:PASS]:enter credentials:()"
+	"--digest[Digest authentication in format \[DOMAIN\\\\\]USER:PASS]:enter credentials:()"
+	"--hc[Hide responses with the specified comma separated codes]:select codes:->http_codes"
+	"--hl[Hide responses with the specified comma separated lines]:enter lines:()"
+	"--hw[Hide responses with the specified comma separated words]:enter words:()"
+	"--hh[Hide responses with the specified comma separated chars]:enter chars:()"
+	"--hs[Hide responses with the specified regex within the content]:enter regex:()"
+	"--sc[Show responses with the specified comma separated codes]:select codes:->http_codes"
+	"--sl[Show responses with the specified comma separated lines]:enter lines:()"
+	"--sw[Show responses with the specified comma separated words]:enter words:()"
+	"--sh[Show responses with the specified comma separated chars]:enter chars:()"
+	"--ss[Show responses with the specified regex within the content]:enter regex:()"
+	"--filter[Show/hide responses using the specified filter expression]:enter filter:()"
+	"--prefilter[Filter items before fuzzing using the specified expression]:enter filter:()"
+)
+
+_modules_types=("encoders" "payloads" "iterators" "printers" "scripts")
+
+_encoders="Enter encoder or several encoders. Several encoders can be specified at once, using '-' as a separator:
+$ wfuzz -z list,1-2-3,none-md5-sha1
+Encoders can also be chained using the '@' char:
+$ wfuzz -z list,1-2-3,none-sha1-sha1@sha1
+Encoders are grouped by categories. This allows to select several encoders by category (also allowed to use '-' or '@'), for example:
+$ wfuzz -z list,1-2-3,url-html
+
+none               Returns string without changes. Category: default
+random_upper       Replaces random characters in string with its capitals letters. Category: default
+hexlify            Every byte of data is converted into the corresponding 2-digit hex representation. Category: default
+base64             Encodes the given string using base64. Category: hashes
+md5                Applies a md5 hash to the given string. Category: hashes
+sha1               Applies a sha1 hash to the given string. Category: hashes
+mssql_char         Converts ALL characters to MsSQL's char(xx). Category: db
+mysql_char         Converts ALL characters to MySQL's char(xx). Category: db
+oracle_char        Converts ALL characters to Oracle's chr(xx). Category: db
+html_decimal       Replaces ALL characters in string using the &#dd; escape. Category: html
+html_hexadecimal   Replaces ALL characters in string using the &#xx; escape. Category: html
+html_escape        Convert the characters &<>\" in string to HTML-safe sequences. Category: html
+first_nibble_hex   Replaces ALL characters in string using the %%dd? escape. Category: url
+doble_nibble_hex   Replaces ALL characters in string using the %%dd%dd escape. Category: url
+second_nibble_hex  Replaces ALL characters in string using the %?%dd escape. Category: url
+uri_hex            Encodes ALL charachers using the %xx escape. Category: url
+uri_double_hex     Encodes ALL charachers using the %25xx escape. Category: url
+uri_triple_hex     Encodes ALL charachers using the %25%xx%xx escape. Category: url
+uri_unicode        Replaces ALL characters in string using the %u00xx escape. Category: url
+urlencode          Replace special characters in string using the %xx escape. Category: url_safe, url
+double urlencode   Applies a double encode to special characters in string using the %25xx escape. Category: url_safe, url
+utf8               Replaces ALL characters in string using the \u00xx escape. Category: url
+utf8_binary        Replaces ALL characters in string using the \uxx escape. Category: url"
+
+_payloads=(
+	"stdin[Returns each item read from stdin]"
+	"file[Returns each word from a file]"
+	"ipnet[Returns list of IP addresses of a network]"
+	"dirwalk[Returns filename's recursively from a local directory]"
+	"burplog[Returns fuzz results from a Burp log]"
+	"permutation[Returns permutations of the given charset and length]"
+	"names[Returns possible usernames by mixing the given words, separated by -, using known typical constructions]"
+	"iprange[Returns list of IP addresses of a given IP range]"
+	"hexrange[Returns each hex number of the given hex range]"
+	"hexrand[Returns random hex numbers from the given range]"
+	"autorize[Returns fuzz results from autorize]"
+	"guitab[This payload reads requests from a tab in the GUI]"
+	"list[Returns each element of the given word list separated by -]"
+	"bing[Returns URL results of a given bing API search (needs api key)]"
+	"shodanp[Returns URLs of a given Shodan API search (needs api key)]"
+	"wfuzzp[Returns fuzz results URL from a previous stored wfuzz session]"
+	"burpitem[This payload loads request/response from items saved from Burpsuite]"
+	"burpstate[Returns fuzz results from a Burp state]"
+	"range[Returns each number of the given range]"
+	"buffer_overflow[Returns a string using the following pattern A * given number]"
+)
+
+_iterators=(
+	"chain[Union all elements from all sources into one container]"
+	"product[Like Cluster Bomb in Burp Suite]"
+	"zip[Like Pitchfork in Burp Suite]"
+)
+
+_printers=(
+	"csv[CSV printer ftw]"
+	"html[Prints results in html format]"
+	"json[Results in json format]"
+	"magictree[Prints results in magictree format]"
+	"raw[Raw output format]"
+)
+
+_scripts=(
+	"cvs_extractor[Parses CVS/Entries file.	Category: default, active, discovery]"
+	"title[Parses HTML page title. Category: verbose, passive]"
+	"listing[Looks for directory listing vulnerabilities. Categoty: default, passive]"
+	"headers[Looks for server headers. Category: verbose, passive]"
+	"screenshot[Performs a screen capture using linux cutycapt tool. Categoty: tools, active]"
+	"svn_extractor[Parses .svn/entries file. Category: default, active, discovery]"
+	"sitemap[Parses sitemap.xml file. Category: default, active, discovery]"
+	"errors[Looks for error messages. Category: default, passive]"
+	"wc_extractor[Parses subversion's wc.db file. Category: default, active, discovery]"
+	"grep[HTTP response grep. Category: tools]"
+	"links[Parses HTML looking for new content. Category: active, discovery]"
+	"backups[Looks for known backup filenames. Category: re-enqueue, active, discovery]"
+	"cookies[Looks for new cookies. Category: verbose, passive]"
+	"robots[Parses robots.txt looking for new content. Category: default, active, discovery]"
+)
+
+_parameters_types=("allvars" "allpost" "allheaders")
+
+_http_methods=("OPTIONS" "GET" "HEAD" "POST" "PUT" "PATCH" "DELETE" "TRACE" "CONNECT")
+
+_http_codes=(
+	"100[Continue]"
+	"101[Switching Protocols]"
+	"102[Processing]"
+	"200[OK]"
+	"201[Created]"
+	"202[Accepted]"
+	"203[Non-Authoritative Information]"
+	"204[No Content]"
+	"205[Reset Content]"
+	"206[Partial Content]"
+	"207[Multi-Status]"
+	"208[Already Reported]"
+	"226[IM Used]"
+	"300[Multiple Choices]"
+	"301[Moved Permanently]"
+	"302[Found]"
+	"303[See Other]"
+	"304[Not Modified]"
+	"305[Use Proxy]"
+	"307[Temporary Redirect]"
+	"308[Permanent Redirect]"
+	"400[Bad Request]"
+	"401[Unauthorized]"
+	"402[Payment Required]"
+	"403[Forbidden]"
+	"404[Not Found]"
+	"405[Method Not Allowed]"
+	"406[Not Acceptable]"
+	"407[Proxy Authentication Required]"
+	"408[Request Timeout]"
+	"409[Conflict]"
+	"410[Gone]"
+	"411[Length Required]"
+	"412[Precondition Failed]"
+	"413[Payload Too Large]"
+	"414[URI Too Long]"
+	"415[Unsupported Media Type]"
+	"416[Range Not Satisfiable]"
+	"417[Expectation Failed ]"
+	"418[I’m a teapot]"
+	"419[Authentication Timeout]"
+	"421[Misdirected Request]"
+	"422[Unprocessable Entity]"
+	"423[Locked]"
+	"424[Failed Dependency]"
+	"426[Upgrade Required]"
+	"428[Precondition Required]"
+	"429[Too Many Requests]"
+	"431[Request Header Fields Too Large]"
+	"449[Retry With]"
+	"451[Unavailable For Legal Reasons]"
+	"499[Client Closed Request]"
+	"500[Internal Server Error]"
+	"501[Not Implemented]"
+	"502[Bad Gateway]"
+	"503[Service Unavailable]"
+	"504[Gateway Timeout]"
+	"505[HTTP Version Not Supported]"
+	"506[Variant Also Negotiates]"
+	"507[Insufficient Storage]"
+	"508[Loop Detected]"
+	"509[Bandwidth Limit Exceeded ]"
+	"510[Not Extended]"
+	"511[Network Authentication Required]"
+	"520[Unknown Error]"
+	"521[Web Server Is Down]"
+	"522[Connection Timed Out]"
+	"523[Origin Is Unreachable]"
+	"524[A Timeout Occurred]"
+	"525[SSL Handshake Failed]"
+	"526[Invalid SSL Certificate]"
+)
+
+_wfuzz() {
+	_arguments $_wfuzz_arglist
+	case "$state" in
+		modules_type)
+			_values modules_type $_modules_types
+			;;
+		file_and_printer)
+			local -a suf
+			if compset -P 1 '*,'; then
+				_values printer $_printers
+			else
+				compset -S ',*' || suf=( -qS , )
+				_files $suf
+			fi
+			;;
+		printer)
+			_values printer $_printers
+			;;
+		proxy)
+			_message -r 'Enter proxy in format ip:port:type. Type could be SOCKS4, SOCKS5 or HTTP if omitted.'
+			;;
+		scripts)
+			_values -s ',' scripts $_scripts
+			;;
+		scripts_args)
+			local scripts_args_help_msg="Provide arguments to scripts in format: script_name.script_argument=value
+At 11 June 2020 there are only two scripts have parameters:
+* grep.regexp='...'
+* backups.ext='.bak,.tgz,.zip,.tar.gz,~,.rar,.old,.-.swp'"
+			_message -r $scripts_args_help_msg
+			;;
+		iterator)
+			_values iterator $_iterators
+			;;
+		payload)
+			local -a suf
+			if compset -P 2 '*,'; then
+				_message -r $_encoders
+			elif compset -P 1 'file,'; then
+				_files -S ,
+			elif compset -P 1 'ipnet,'; then
+				_message -r 'Enter network range in format: ip/mask (e.g. 192.168.1.0/24)'
+			elif compset -P 1 'dirwalk,'; then
+				_files -/ -S ,
+			elif compset -P 1 'burplog,'; then
+				_files -S ,
+			elif compset -P 1 'permutation,'; then
+				_message -r 'Enter charset and length in format: charset-length (e.g. abc-2)'
+			elif compset -P 1 'names,'; then
+				_message -r 'Enter name and surname in format: name-surname (e.g. jon-smith)'
+			elif compset -P 1 'iprange,'; then
+				_message -r 'Enter IP address range in format: startIP-endIP (e.g. 192.168.1.0-192.168.1.12)'
+			elif compset -P 1 'hexrange,'; then
+				_message -r 'Enter range of hex numbers to generate in format: start_byte-end_byte (e.g. 00-ff)'
+			elif compset -P 1 'hexrand,'; then
+				_message -r 'Enter range of hex numbers to randomly generate in format: start_byte-end_byte (e.g. 00-ff)'
+			elif compset -P 1 'autorize,'; then
+				_files -S ,
+			elif compset -P 1 'list,'; then
+				_message -r 'Enter values separated by - to return as a dictionary (e.g. word1-word2-word3)'
+			elif compset -P 1 'bing,'; then
+				_message -r 'Enter Google dork search string'
+			elif compset -P 1 'shodanp,'; then
+				_message -r 'Enter Shodan search string'
+			elif compset -P 1 'wfuzzp,'; then
+				_files -S ,
+			elif compset -P 1 'burpitem,'; then
+				_files -S ,
+			elif compset -P 1 'burpstate,'; then
+				_files -S ,
+			elif compset -P 1 'range,'; then
+				_message -r 'Enter range of numbers in format start-end (e.g. 0-10)'
+			elif compset -P 1 'buffer_overflow,'; then
+				_message -r 'Enter size of the overflow string (e.g. 100)'			
+			else
+				compset -S ',*' || suf=( -qS , )
+				_values -s ',' payload $_payloads
+			fi
+			;;
+		payload_default_param)
+			# I am tired to do this and don't know how to do these two completions.
+			# If you know how to use wfuzz and got logic of my completion file you are welcome to pull requests.
+			;;
+		payload_params)
+			# I am tired to do this and don't know how to do these two completions.
+			# If you know how to use wfuzz and got logic of my completion file you are welcome to pull requests.
+			;;
+		encoders)
+			_message -r $_encoders
+			;;
+		parameters_type)
+			_values parameters_type $_parameters_types
+			;;
+		http_method)
+			_values http_method $_http_methods
+			;;
+		http_codes)
+			_values -s ',' http_codes $_http_codes
+			;;
+	esac
+}
+
+case "$service" in
+	wfuzz)
+		_wfuzz "$@" && return 0
+		;;
+esac

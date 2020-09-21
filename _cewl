@@ -1,0 +1,31 @@
+#compdef cewl
+
+_arguments \
+	'(-k --keep)'{-k,--keep}'[Keep the downloaded file]' \
+	'(-d --depth)'{-d,--depth}'[Depth to spider to (default: 2)]:enter depth:()' \
+	'(-m --min_word_length)'{-m,--min_word_length}'[Minimum word length (default: 3)]:enter length:()' \
+	'(-o --offsite)'{-o,--offsite}'[Let the spider visit other sites]' \
+	'--exclude[A file containing a list of paths to exclude]:select file:_files' \
+	'--allowed[A regex pattern that path must match to be followed]:enter regex:()' \
+	'(-w --write)'{-w,--write}'[Write the output to the file]:select file:_files -X "Select output file or enter filename manually"' \
+	'(-u --ua)'{-u,--ua}'[User-Agent HTTP header]:enter User-Agent:()' \
+	'(-n --no-words)'{-n,--no-words}"[Don't output the wordlist]" \
+	'--lowercase[Lowercase all parsed words]' \
+	'--with-numbers[Accept words with numbers in as well as just letters]' \
+	'--convert-umlauts[Convert common ISO-8859-1 (Latin-1) umlauts (ä-ae, ö-oe, ü-ue, ß-ss)]' \
+	'(-a --meta)'{-a,--meta}'[Include meta data]' \
+	'--meta_file[Output file for meta data]:select file:_files -X "Select output file or enter filename manually"' \
+	'(-e --email)'{-e,--email}'[Include email addresses]' \
+	'--email_file[Output file for email addresses]:select file:_files -X "Select output file or enter filename manually"' \
+	'--meta-temp-dir[The temporary directory used by exiftool when parsing files (default: /tmp)]:select dir:_files -/' \
+	'(-c --count)'{-c,--count}'[Show the count for each word found]' \
+	'(-v --verbose)'{-v,--verbose}'[Verbose]' \
+	'--debug[Extra debug information]' \
+	'--auth_type[Digest or basic]:select auth type:_values auth_type digest basic' \
+	'--auth_user[Authentication username]:enter username:()' \
+	'--auth_pass[Authentication password]:enter password:()' \
+	'--proxy_host[Proxy host]:enter host:()' \
+	'--proxy_port[Proxy port (default: 8080)]:select port:_ports -X "Select port for protocol name or enter it manually"' \
+	'--proxy_username[Username for proxy, if required]:enter proxy username:()' \
+	'--proxy_password[Password for proxy, if required]:enter proxy password:()' \
+	'(-H --header)'{-H,--header}"[HTTP request header (e.g. --header 'Referer: example.com' --header 'User-Agent: IE')]:enter header:()"

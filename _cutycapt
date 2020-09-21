@@ -1,0 +1,32 @@
+#compdef cutycapt
+
+_arguments \
+	'--url=[URL to capture]:enter URL:()' \
+	'--out=[The target file (.png|pdf|ps|svg|jpeg|...)]:enter filename:()' \
+	'--out-format=[Like extension in --out, overrides heuristic]:enter format:()' \
+	'--min-width=[Minimal width for the image (default: 800)]:enter width:()' \
+	'--min-height=[Minimal height for the image (default: 600)]:enter height:()' \
+	"--max-wait=[Don't wait more than (default: 90000, inf: 0) in ms]:enter wait time:()" \
+	'--delay=[After successful load, wait (default: 0) in ms]:enter delay:()' \
+	'--user-style-path=[Location of user style sheet file, if any]:select file:_files' \
+	'--user-style-string=[User style rules specified as text]:enter CSS:()' \
+	"--header=[HTTP request header (e.g. --header 'Referer: example.com' --header 'User-Agent: IE')]:enter header:()" \
+	'--method=[HTTP request method (default: get)]:select method:_values method get post put' \
+	'--body-string=[HTTP request body (default: none)]:enter body:()' \
+	'--body-base64=[Base64-encoded HTTP request body (default: none)]:enter base64:()' \
+	'--app-name=[AppName used in User-Agent; default is none]:enter AppName:()' \
+	'--app-version=[AppVers used in User-Agent; default is none]:enter AppVers:()' \
+	'--user-agent=[Override the User-Agent header Qt would set]:enter User-Agent:()' \
+	'--javascript=[JavaScript execution (default: on)]:select js execution:_values js_execution on off' \
+	'--java=[Java execution (default: unknown)]:select java execution:_values java_execution on off' \
+	'--plugins=[Plugin execution (default: unknown)]:select plugin execution:_values plugin_execution on off' \
+	'--private-browsing=[Private browsing (default: unknown)]:select private browsing policy:_values private on off' \
+	'--auto-load-images=[Automatic image loading (default: on)]:select auto image loading:_values loading on off' \
+	'--js-can-open-windows=[Script can open windows? (default: unknown)]:select js open windows:_values js_open on off' \
+	'--js-can-access-clipboard=[Script clipboard privs (default: unknown)]:select clipboard privs:_values clip_privs on off' \
+	'--print-backgrounds=[Backgrounds in PDF/PS output (default: off)]:select background printing:_values backgrounds on off' \
+	'--zoom-factor=[Page zoom factor (default: no zooming)]:enter coeff:()' \
+	'--zoom-text-only=[Whether to zoom only the text (default: off)]:select zoom text only:_values zoom_text on off' \
+	'--http-proxy=[Address for HTTP proxy server (default: none)]:enter proxy:()' \
+	"--smooth=[Attempt to enable Qt's high-quality settings]" \
+	'--insecure=[Ignore SSL/TLS certificate errors]'
