@@ -1,15 +1,22 @@
 #compdef dnsrecon
 
 local types=(
-	'axfr[Zone transfer]'
-	'brt[Brute-force]'
-	'snoop[Cache snooping]'
-	'zonewalk[Zone walking]'
+	'std[SOA, NS, A, AAAA, MX and SRV]'
+	'brt[Brute force domains and hosts using a given dictionary]'
+	'rvl[Reverse lookup of a given CIDR or IP range]'
+	'srv[SRV records]'
+	'axfr[Test all NS servers for a zone transfer]'
+	'bing[Perform Bing search for subdomains and hosts]'
+	'yand[Perform Yandex search for subdomains and hosts]'
+	'crt[Perform crt.sh search for subdomains and hosts]'
+	'snoop[Perform cache snooping against all NS servers for a given domain testing all with file containing the domains]'
+	'tld[Remove the TLD of given domain and test against all TLDs registered in IANA]'
+	'zonewalk[Perform a DNSSEC zone walk using NSEC records]'
 )
 
 _arguments \
 	'(-d --domain)'{-d,--domain}'[Target domain]:()' \
-	'(-n --name_server)'{-n,--name_server}'[Comma separated domain servers to use. If none is given, the SOA of the target will be used]:()' \
+	'(-n --name_server)'{-n,--name_server}'[Comma separated domain servers to use (if none is given, the SOA of the target domain will be used)]:()' \
 	'(-r --range)'{-r,--range}'[IP range for reverse lookup brute force in formats first-last or range/bitmask]:()' \
 	'(-D --dictionary)'{-D,--dictionary}'[Dictionary file of subdomain and hostnames to use for brute force]:select file:_files' \
 	'-v[Enable verbose]' \
