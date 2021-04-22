@@ -1,6 +1,6 @@
 #compdef revshellgen.py
 
-local types=('netcat' 'bash' 'file' 'python' 'awk' 'lua' 'php' 'perl' 'ruby' 'socat' 'openssl')
+local types=('netcat' 'bash' 'file' 'python' 'awk' 'lua' 'php' 'perl' 'ruby' 'socat' 'openssl' 'powershell')
 
 _arguments -C \
 	'1:select address:_hosts' \
