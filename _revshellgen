@@ -1,4 +1,4 @@
-#compdef revshellgen.py
+#compdef revshellgen
 
 local types=('netcat' 'bash' 'file' 'python' 'awk' 'lua' 'php' 'perl' 'ruby' 'socat' 'openssl' 'powershell')
 

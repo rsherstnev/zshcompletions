@@ -1,0 +1,7 @@
+#compdef updog
+
+_arguments \
+    '(-d --directory)'{-d,--directory}'[Web server root directory]:select directory:_files -/' \
+    '(-p --port)'{-p,--port}'[Port to serve]:select port:_ports -X "Select port for protocol name or enter it manually"' \
+    '--password[Use a password to access the page. (No username)]:enter password:()' \
+    '--ssl[Use an encrypted connection]'

@@ -23,4 +23,5 @@ _arguments \
     '(-c --category)'{-c,--category}'[Script category for searching]:select category:_values category $categories' \
     '(-d --description)'{-d,--description}'[Script description for searching]:()' \
     '(-a --absolute-path)'{-a,--absolute-path}'[Print scripts absolute paths (default: only names)]' \
+    '(-o --option)'{-o,--option}'[Output in option format for using in nmap scan]' \
     '(-v --verbose)'{-v,--verbose}'[Verbose output (name / path + categories + description; default: name / path)]'
