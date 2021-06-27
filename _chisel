@@ -1,0 +1,59 @@
+#compdef chisel
+
+local args ret=1
+typeset -A opt_args
+
+_arguments -C \
+	'1:select mode:->mode' \
+	'*:: :->args' \
+&& ret=0
+
+case "$state" in
+	mode)
+		_values chisel_mode server client && ret=0
+	;;
+	args)
+		args=(
+			'--auth[Login and password to connect to server in format user:pass]:credential'
+			'--keepalive[Timeout to support alive access through HTTP proxy (default: 25s)]:timeout'
+			'--pid[Generate pid file in current working directory]'
+			'-v[Enable verbose logging]'
+			'--help[Print this help]'
+		)
+		case $line[1] in
+			server)
+				args+=(
+					'--host[HTTP listening host – the network interface (default: 0.0.0.0)]:interface'
+					{-p,--port}'[HTTP listening port (default: 8080)]:port'
+					'--key[Seed the generation of a ECDSA public and private key pair]:seed'
+					'--authfile[File with possible credentials to connect to server]:authfile:_files'
+					'--backend[Another HTTP server to proxy requests to when chisel receives a normal HTTP request]:backend'
+					'--socks5[Allow clients to access the internal SOCKS5 proxy]'
+					'--reverse[Allow clients to specify reverse port forwarding remotes in addition to normal remotes]'
+					'(--tls-domain)--tls-key[PEM-encoded TLS private key]:key:_files'
+					'(--tls-domain)--tls-cert[PEM-encoded TLS certificate]:cert:_files'
+					'(--tls-key --tls-cert)--tls-domain[Enables TLS and automatically acquires a TLS key and certificate using LetsEncypt]:domain'
+					'--tls-ca[PEM encoded CA certificate bundle]:bundle:_files'
+				)
+				_arguments $args && ret=0
+			;;
+			client)
+				args+=(
+					"--fingerprint[Fingerprint string to perform host-key validation against the server's public key]:fingerprint"
+					'--max-retry-count[Maximum number of times to retry before exiting (default: unlimited)]:retries'
+					'--max-retry-interval[Maximum wait time before retrying after a disconnection (default: 5 minutes)]:interval'
+					'--proxy[HTTP/SOCKS5 proxy (e.g. socks://admin:password@my-server.com:1080)]:proxy'
+					'*--header[Set a custom header in format "HeaderName: HeaderContent"]:header'
+					'--hostname[HTTP "Host:" header value (default: the host found in the server url)]:value'
+					'--tls-ca[Root certificate bundle used to verify the chisel server]:bundle:_files'
+					'--tls-skip-verify[Skip server TLS certificate verification of chain and host name]'
+					'--tls-key[PEM encoded private key used for client authentication]:key:_files'
+					'--tls-cert[PEM encoded certificate matching the provided private key]:cert:_files'
+				)
+				_arguments $args && ret=0
+			;;
+		esac
+	;;
+esac
+
+return ret
