@@ -1,6 +1,48 @@
 #compdef nmap
 
-local curcontext="$curcontext" state line suf timing_templates script_categories ret=1
+local curcontext="$curcontext" state line suf pingsweep_techniques scan_techniques log_formats timing_templates script_categories ret=1
+
+pingsweep_techniques=(
+    'n[Treat all hosts as online -- skip host discovery]'
+    'S[TCP SYN]'
+    'A[TCP ACK]'
+    'U[UDP]'
+    'Y[SCTP]'
+    'E[ICMP ECHO]'
+    'P[ICMP timestamp]'
+    'M[Netmask request]'
+    'O[IP protocol]'
+)
+
+scan_techniques=(
+    'S[TCP SYN]'
+    'T[TCP Connect()]'
+    'F[TCP FIN]'
+    'X[TCP Xmas]'
+    'N[TCP NULL]'
+    'P[Ping - disable port scan]'
+    'U[UDP]'
+    'O[IP protocol]'
+    'M[TCP Maimon]'
+    'Y[SCTP INIT]'
+    'Z[SCTP COOKIE ECHO]'
+    'I[Idle]'
+    'A[TCP ACK]'
+    'W[TCP Window]'
+    'R[RPC (now is alias to -sV)]'
+    'L[List - simply list targets to scan]'
+    'V[Probe open ports to determine service/version info]'
+    'n[Ping - disable port scan]'
+    'C[Equivalent to --script default]'
+)
+
+log_formats=(
+    'N[Human readable (normal)]'
+    'X[XML]'
+    'G[Grepable]'
+    'A[All]'
+    'S[S|<ipT kiDdI3]'
+)
 
 timing_templates=(
     '0[Paranoid]'
@@ -29,10 +71,10 @@ script_categories=(
 )
 
 _arguments -C \
-    '*-s-[Specify scan technique]:scan technique:((S\:TCP\ SYN T\:TCP\ Connect\(\) F\:TCP\ FIN X\:TCP\ Xmas N\:TCP\ NULL P\:Ping\ -\ disable\ port\ scan U\:UDP O\:IP\ protocol M\:TCP\ Maimon Y\:SCTP\ INIT Z\:SCTP\ COOKIE\ ECHO I\:Idle A\:TCP\ ACK W\:TCP\ Window R\:RPC\ \(now\ is\ alias\ to\ -sV\) L\:List\ -\ simply\ list\ targets\ to\ scan V\:Probe\ open\ ports\ to\ determine\ service/version\ info n\:Ping\ -\ disable\ port\ scan C\:Equivalent\ to\ --script\ default))' \
+    '*-s-[Specify scan technique]:select scan technique:_values scan_technique $scan_techniques' \
     '!-sI:zombie host and probeport:_hosts' \
     '-b[FTP bounce scan]:ftp relay host:_hosts' \
-    '*-P-[Specify pingsweep technique and options]:probe type/options:->probe-opts' \
+    '*-P-[Specify pingsweep technique and options]:select pingsweep technique:_values -S "" pingsweep_technique $pingsweep_techniques ' \
     '!-P'{S,A,U,Y}'+:port list' \
     '!-P'{O,}'+:protocol list' \
     '-A[Enable OS and service version detection, script scanning and traceroute]' \
@@ -44,7 +86,7 @@ _arguments -C \
     '--mtu[MTU for fragmentation (option -f required)]:enter MTU:()' \
     '*-v[Increase verbosity level (use -vv or more for greater effect)]' \
     '-h[Print this help summary page]' \
-    '*-o-[Log results in file]:log format:->log-forms:log filename:_files' \
+    '*-o-[Log results in file]:select log format:_values log_format $log_formats:log filename:_files' \
     '--resume[Resume an aborted scan]:log filename:_files' \
     '--append-output[Append to rather than clobber specified output files]' \
     '-iL[File with list of hosts/networks targets]:file:_files' \
@@ -117,26 +159,6 @@ _arguments -C \
     '*:host:_hosts' && ret=0
 
 case $state in
-    probe-opts)
-        _values -S '' 'probe type/option' \
-          'n[Treat all hosts as online -- skip host discovery]' \
-          'S[TCP SYN]' \
-          'A[TCP ACK]' \
-          'U[UDP]' \
-          'Y[SCTP]' \
-          'E[ICMP ECHO]' \
-          'P[ICMP timestamp]' \
-          'M[Netmask request]' \
-          'O[IP protocol]' && ret=0
-    ;;
-    log-forms)
-        _values 'log format' \
-          'N[Human readable (normal)]' \
-          'X[XML]' \
-          'G[Grepable]' \
-          'A[All]' \
-          'S[S|<ipT kiDdI3]' && ret=0
-    ;;
     host-list)
       suf=()
       compset -P '*,'
