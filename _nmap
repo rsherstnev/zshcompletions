@@ -1,0 +1,148 @@
+#compdef nmap
+
+local curcontext="$curcontext" state line suf timing_templates script_categories ret=1
+
+timing_templates=(
+    '0[Paranoid]'
+    '1[Sneaky]'
+    '2[Polite]'
+    '3[Normal]'
+    '4[Aggressive]'
+    '5[Insane]'
+)
+
+script_categories=(
+    'auth[Deal with authentication credentials (or bypassing them) on the target system]'
+    'broadcast[Do discovery of hosts not listed on the command line by broadcasting on the local network]'
+    'brute[Brute force attacks to guess authentication credentials of a remote server]'
+    'default[Scripts with good characteristics: speed, reliability, privacy ...]'
+    'discovery[Active discovering more about the network by querying public registries]'
+    'dos[May cause / created for a denial of service]'
+    'exploit[Active exploiting some vulnerability]'
+    'external[May send data to a third-party database or other network resource (e.g. whois-ip)]'
+    'fuzzer[Send server software unexpected or randomized fields in each packet]'
+    'intrusive[High probability that they will crash or use up significant resources the target host]'
+    'malware[Test whether the target platform is infected by malware or backdoors]'
+    "safe[Weren't designed to crash services, use large amounts of network bandwidth, or exploit security holes]"
+    'version[Extensions to the version detection (-sV) features (e.g pptp-version)]'
+    'vuln[Check for specific known vulnerabilities and generally only report results if they are found]'
+)
+
+_arguments -C \
+    '*-s-[Specify scan technique]:scan technique:((S\:TCP\ SYN T\:TCP\ Connect\(\) F\:TCP\ FIN X\:TCP\ Xmas N\:TCP\ NULL P\:Ping\ -\ disable\ port\ scan U\:UDP O\:IP\ protocol M\:TCP\ Maimon Y\:SCTP\ INIT Z\:SCTP\ COOKIE\ ECHO I\:Idle A\:TCP\ ACK W\:TCP\ Window R\:RPC\ \(now\ is\ alias\ to\ -sV\) L\:List\ -\ simply\ list\ targets\ to\ scan V\:Probe\ open\ ports\ to\ determine\ service/version\ info n\:Ping\ -\ disable\ port\ scan C\:Equivalent\ to\ --script\ default))' \
+    '!-sI:zombie host and probeport:_hosts' \
+    '-b[FTP bounce scan]:ftp relay host:_hosts' \
+    '*-P-[Specify pingsweep technique and options]:probe type/options:->probe-opts' \
+    '!-P'{S,A,U,Y}'+:port list' \
+    '!-P'{O,}'+:protocol list' \
+    '-A[Enable OS and service version detection, script scanning and traceroute]' \
+    '-O[Enable OS detection]' \
+    '--osscan-limit[Limit OS detection to promising targets]' \
+    '--osscan-guess[Guess OS more aggressively]' \
+    '-6[Enable IPv6 scanning]' \
+    '-f[Fragment packets]' \
+    '--mtu[MTU for fragmentation (option -f required)]:enter MTU:()' \
+    '*-v[Increase verbosity level (use -vv or more for greater effect)]' \
+    '-h[Print this help summary page]' \
+    '*-o-[Log results in file]:log format:->log-forms:log filename:_files' \
+    '--resume[Resume an aborted scan]:log filename:_files' \
+    '--append-output[Append to rather than clobber specified output files]' \
+    '-iL[File with list of hosts/networks targets]:file:_files' \
+    '-iR[Choose random targets]:num hosts' \
+    '-p[Scan only specified ports (e.g. -p22; -p1-65535; -p T:21-25,80,139,8080,U:53,111,137,S:9)]:port numbers' \
+    '-F[Scan only ports listed in services file]' \
+    '-D[Cloak a scan with decoys]:host list:_sequence -s, _hosts' \
+    '-S[Spoof source address]:enter IP address:()' \
+    '-e[Use specified interface]:network interface:_net_interfaces' \
+    '(-g --source-port)'{-g,--source-port}'[Use given port number]:enter port:()' \
+    '--data-length[Append random data to sent packets]:data length' \
+    '--data-string[Append a custom ASCII string to sent packets]:enter string:()' \
+    '--data[Append a custom payload to sent packets]:enter hex data:()' \
+    '(-R)-n[Never do DNS resolution (default: sometimes)]' \
+    '(-n)-R[Always resolve DNS names (default: sometimes)]' \
+    "-r[Scan ports consecutively - don't randomize]" \
+    '--randomize-hosts[Scan hosts in random order]' \
+    '--packet-trace[Show all packets sent and received]' \
+    '--version-intensity[Version scan intensity]:select intensity: _values intensity 0 1 2 3 4 5 6 7 8 9' \
+    '--version-light[Limit to most likely probes (eq --version-intensity 2)]' \
+    '--version-all[Try every single probe (eq --version-intensity 9)]' \
+    '--version-trace[Show detailed version scan activity (for debugging)]' \
+    '--datadir[Custom Nmap data file location]:directory:_directories' \
+    '-T-[Set timing template]:select timing template:_values template $timing_templates' \
+    '--host-timeout[Maximum time for scanning a single host]:timeout (ms)' \
+    '--max-rtt-timeout[Maximum time to wait for a probe response]:timeout (ms)' \
+    '--min-rtt-timeout[Minimum time to wait for a probe response]:timeout (ms)' \
+    '--initial-rtt-timeout[Specifies probe round trip time]:timeout (ms)' \
+    '--max-parallelism[Maximum number of scans to perform in parallel]:number' \
+    '--min-parallelism[Minimun number of scans to perform in parallel]:number' \
+    '--scan-delay[Minimum amount of time between probes]:delay (ms)' \
+    '--max-scan-delay[Maximum amount of time between probes]:delay (ms)' \
+    '-V[Print version number]' \
+    '(--unprivileged)--privileged[Assume that the user is fully privileged]' \
+    '(--privileged)--unprivileged[Assume the user lacks raw socket privileges]' \
+    '--no-stylesheet[Prevent associating of XSL stylesheet w/XML output]' \
+    '--webxml[Reference stylesheet from Nmap.Org for more portable XML]' \
+    '*-d[Increase debugging level (use -dd or more for greater effect)]' \
+    '--reason[Display the reason a port is in a particular state]' \
+    '--open[Show only open (or possibly open) ports]' \
+    '--iflist[Print host interfaces and routes (for debugging)]' \
+    '--badsum[Send packets with a bogus TCP/UDP/SCTP checksum]' \
+    '--exclude[Exclude hosts/networks]:enter comma separated hosts / network:_sequence -s, _hosts' \
+    '--excludefile[Exclude targets list from file]:select file: _files' \
+    '--dns-servers[Custom DNS servers to use]:enter comma separated DNS servers:()' \
+    "--system-dns[Use OS's DNS resolver]" \
+    '--traceroute[Trace hop path to each host]' \
+    '--scanflags[Custom TCP scan flags]:enter TCP scan flags:()' \
+    '--exclude-ports[Exclude the specified ports from scanning]:enter comma separated ports:()' \
+    '--top-ports[Scan <number> most common ports]:enter number of ports:()' \
+    '(--send-ip)--send-eth[Send using raw ethernet frames]' \
+    '(--send-eth)--send-ip[Send using IP packets]' \
+    '--ttl[IP time-to-live field]:enter TTL:()' \
+    '--port-ratio[Scan ports more common than <ratio>]:enter ratio:()' \
+    '--spoof-mac[Spoof your MAC address]:enter mac address or prefix or vendor name:()' \
+    '--stylesheet[XSL stylesheet to transform XML output to HTML]:enter path or url:()' \
+    '--ip-options[Send packets with specified ip options]:enter options:()' \
+    '--proxies[Relay connections through HTTP/SOCKS4 proxies]:enter comma separated proxies:()' \
+    '--min-rate[Send packets no slower than <number> per second]:enter rate:()' \
+    '--max-rate[Send packets no faster than <number> per second]:enter rate:()' \
+    '--script[Comma separated script-files, script-categories or/and directories with script(s)]:enter entries:_values category $script_categories' \
+    '--script-args[Arguments to scripts]:enter arguments:()' \
+    '--script-args-file[File with script arguments]:select file: _files' \
+    '--script-trace[Show all scripts scanning data sent and received]' \
+    '--script-updatedb[Update the script database]' \
+    '--script-help[Show help about scripts or script-categories]:enter comma separated scripts or categories:()' \
+    '--min-hostgroup[Minimum parallel host scan group sizes]:enter size:()' \
+    '--max-hostgroup[Maximum parallel host scan group sizes]:enter size:()' \
+    '--max-retries[Caps number of port scan probe retransmissions]:enter retries:()' \
+    '*:host:_hosts' && ret=0
+
+case $state in
+    probe-opts)
+        _values -S '' 'probe type/option' \
+          'n[Treat all hosts as online -- skip host discovery]' \
+          'S[TCP SYN]' \
+          'A[TCP ACK]' \
+          'U[UDP]' \
+          'Y[SCTP]' \
+          'E[ICMP ECHO]' \
+          'P[ICMP timestamp]' \
+          'M[Netmask request]' \
+          'O[IP protocol]' && ret=0
+    ;;
+    log-forms)
+        _values 'log format' \
+          'N[Human readable (normal)]' \
+          'X[XML]' \
+          'G[Grepable]' \
+          'A[All]' \
+          'S[S|<ipT kiDdI3]' && ret=0
+    ;;
+    host-list)
+      suf=()
+      compset -P '*,'
+      compset -S ',*' || suf=(-qS ,)
+      _hosts "$suf[@]" && ret=0
+    ;;
+esac
+
+return ret
