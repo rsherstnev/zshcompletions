@@ -71,10 +71,10 @@ script_categories=(
 )
 
 _arguments -C \
-    '*-s-[Specify scan technique]:select scan technique:_values scan_technique $scan_techniques' \
+    '*-s-[Specify scan technique]:scan technique:_values scan_technique $scan_techniques' \
     '!-sI:zombie host and probeport:_hosts' \
     '-b[FTP bounce scan]:ftp relay host:_hosts' \
-    '*-P-[Specify pingsweep technique and options]:select pingsweep technique:_values -S "" pingsweep_technique $pingsweep_techniques ' \
+    '*-P-[Specify pingsweep technique and options]:pingsweep techniques:_values -S "" pingsweep_technique $pingsweep_techniques' \
     '!-P'{S,A,U,Y}'+:port list' \
     '!-P'{O,}'+:protocol list' \
     '-A[Enable OS and service version detection, script scanning and traceroute]' \
@@ -83,40 +83,40 @@ _arguments -C \
     '--osscan-guess[Guess OS more aggressively]' \
     '-6[Enable IPv6 scanning]' \
     '-f[Fragment packets]' \
-    '--mtu[MTU for fragmentation (option -f required)]:enter MTU:()' \
+    '--mtu[MTU for fragmentation (option -f required)]:mtu' \
     '*-v[Increase verbosity level (use -vv or more for greater effect)]' \
     '-h[Print this help summary page]' \
-    '*-o-[Log results in file]:select log format:_values log_format $log_formats:log filename:_files' \
-    '--resume[Resume an aborted scan]:log filename:_files' \
+    '*-o-[Log results in file]:log format:_values log_format $log_formats:log filename:_files' \
+    '--resume[Resume an aborted scan]:scan file:_files' \
     '--append-output[Append to rather than clobber specified output files]' \
     '-iL[File with list of hosts/networks targets]:file:_files' \
-    '-iR[Choose random targets]:num hosts' \
-    '-p[Scan only specified ports (e.g. -p22; -p1-65535; -p T:21-25,80,139,8080,U:53,111,137,S:9)]:port numbers' \
+    '-iR[Choose random targets]:hosts amount' \
+    '-p[Scan only specified ports (e.g. -p22; -p1-65535; -p T:21-25,80,139,8080,U:53,111,137,S:9)]:ports' \
     '-F[Scan only ports listed in services file]' \
-    '-D[Cloak a scan with decoys]:host list:_sequence -s, _hosts' \
-    '-S[Spoof source address]:enter IP address:()' \
+    '-D[Cloak a scan with decoys]:decoys:_sequence -s, _hosts' \
+    '-S[Spoof source address]:source IP address' \
     '-e[Use specified interface]:network interface:_net_interfaces' \
-    '(-g --source-port)'{-g,--source-port}'[Use given port number]:enter port:()' \
+    '(-g --source-port)'{-g,--source-port}'[Use given port number]:port' \
     '--data-length[Append random data to sent packets]:data length' \
-    '--data-string[Append a custom ASCII string to sent packets]:enter string:()' \
-    '--data[Append a custom payload to sent packets]:enter hex data:()' \
+    '--data-string[Append a custom ASCII string to sent packets]:ascii string' \
+    '--data[Append a custom payload to sent packets]:hex data' \
     '(-R)-n[Never do DNS resolution (default: sometimes)]' \
     '(-n)-R[Always resolve DNS names (default: sometimes)]' \
     "-r[Scan ports consecutively - don't randomize]" \
     '--randomize-hosts[Scan hosts in random order]' \
     '--packet-trace[Show all packets sent and received]' \
-    '--version-intensity[Version scan intensity]:select intensity: _values intensity 0 1 2 3 4 5 6 7 8 9' \
+    '--version-intensity[Version scan intensity]:intensity:_values intensity 0 1 2 3 4 5 6 7 8 9' \
     '--version-light[Limit to most likely probes (eq --version-intensity 2)]' \
     '--version-all[Try every single probe (eq --version-intensity 9)]' \
     '--version-trace[Show detailed version scan activity (for debugging)]' \
-    '--datadir[Custom Nmap data file location]:directory:_directories' \
-    '-T-[Set timing template]:select timing template:_values template $timing_templates' \
+    '--datadir[Custom Nmap data file location]:nmap data file dir:_directories' \
+    '-T-[Set timing template]:timing template:_values timing_template $timing_templates' \
     '--host-timeout[Maximum time for scanning a single host]:timeout (ms)' \
     '--max-rtt-timeout[Maximum time to wait for a probe response]:timeout (ms)' \
     '--min-rtt-timeout[Minimum time to wait for a probe response]:timeout (ms)' \
     '--initial-rtt-timeout[Specifies probe round trip time]:timeout (ms)' \
-    '--max-parallelism[Maximum number of scans to perform in parallel]:number' \
-    '--min-parallelism[Minimun number of scans to perform in parallel]:number' \
+    '--max-parallelism[Maximum number of scans to perform in parallel]:number of scans' \
+    '--min-parallelism[Minimun number of scans to perform in parallel]:number of scans' \
     '--scan-delay[Minimum amount of time between probes]:delay (ms)' \
     '--max-scan-delay[Maximum amount of time between probes]:delay (ms)' \
     '-V[Print version number]' \
@@ -129,34 +129,33 @@ _arguments -C \
     '--open[Show only open (or possibly open) ports]' \
     '--iflist[Print host interfaces and routes (for debugging)]' \
     '--badsum[Send packets with a bogus TCP/UDP/SCTP checksum]' \
-    '--exclude[Exclude hosts/networks]:enter comma separated hosts / network:_sequence -s, _hosts' \
-    '--excludefile[Exclude targets list from file]:select file: _files' \
-    '--dns-servers[Custom DNS servers to use]:enter comma separated DNS servers:()' \
+    '--exclude[Exclude hosts/networks]:list of hosts/networks:_sequence -s, _hosts' \
+    '--excludefile[Exclude targets list from file]:file:_files' \
+    '--dns-servers[Custom DNS servers to use]:list of DNS servers' \
     "--system-dns[Use OS's DNS resolver]" \
     '--traceroute[Trace hop path to each host]' \
-    '--scanflags[Custom TCP scan flags]:enter TCP scan flags:()' \
-    '--exclude-ports[Exclude the specified ports from scanning]:enter comma separated ports:()' \
-    '--top-ports[Scan <number> most common ports]:enter number of ports:()' \
+    '--scanflags[Custom TCP scan flags]:flags' \
+    '--exclude-ports[Exclude the specified ports from scanning]:list of ports' \
+    '--top-ports[Scan <number> most common ports]:number' \
     '(--send-ip)--send-eth[Send using raw ethernet frames]' \
     '(--send-eth)--send-ip[Send using IP packets]' \
-    '--ttl[IP time-to-live field]:enter TTL:()' \
-    '--port-ratio[Scan ports more common than <ratio>]:enter ratio:()' \
-    '--spoof-mac[Spoof your MAC address]:enter mac address or prefix or vendor name:()' \
-    '--stylesheet[XSL stylesheet to transform XML output to HTML]:enter path or url:()' \
-    '--ip-options[Send packets with specified ip options]:enter options:()' \
-    '--proxies[Relay connections through HTTP/SOCKS4 proxies]:enter comma separated proxies:()' \
-    '--min-rate[Send packets no slower than <number> per second]:enter rate:()' \
-    '--max-rate[Send packets no faster than <number> per second]:enter rate:()' \
-    '--script[Comma separated script-files, script-categories or/and directories with script(s)]:enter entries:_values category $script_categories' \
-    '--script-args[Arguments to scripts]:enter arguments:()' \
-    '--script-args-file[File with script arguments]:select file: _files' \
+    '--ttl[IP time-to-live field]:ttl' \
+    '--port-ratio[Scan ports more common than <ratio>]:ratio' \
+    '--spoof-mac[Spoof your MAC address]:mac address/prefix/vendor name' \
+    '--stylesheet[XSL stylesheet to transform XML output to HTML]:fs path / url' \
+    '--ip-options[Send packets with specified ip options]:options' \
+    '--proxies[Relay connections through HTTP/SOCKS4 proxies]:list of proxies' \
+    '--min-rate[Send packets no slower than <number> per second]:rate' \
+    '--max-rate[Send packets no faster than <number> per second]:rate' \
+    '--script[Comma separated script-files, script-categories or/and directories with script(s)]:entries:_values category $script_categories' \
+    '--script-args[Arguments to scripts]:arguments' \
+    '--script-args-file[File with script arguments]:file:_files' \
     '--script-trace[Show all scripts scanning data sent and received]' \
     '--script-updatedb[Update the script database]' \
-    '--script-help[Show help about scripts or script-categories]:enter comma separated scripts or categories:()' \
-    '--min-hostgroup[Minimum parallel host scan group sizes]:enter size:()' \
-    '--max-hostgroup[Maximum parallel host scan group sizes]:enter size:()' \
-    '--max-retries[Caps number of port scan probe retransmissions]:enter retries:()' \
-    '*:host:_hosts' && ret=0
+    '--script-help[Show help about scripts or script-categories]:list of scripts/categories' \
+    '--min-hostgroup[Minimum parallel host scan group sizes]:size' \
+    '--max-hostgroup[Maximum parallel host scan group sizes]:size' \
+    '--max-retries[Caps number of port scan probe retransmissions]:retries' && ret=0
 
 case $state in
     host-list)
