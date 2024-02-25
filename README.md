@@ -1,25 +1,21 @@
-## How to add completion for tool in my system?
-- Have zsh as your command interpreter and oh-my-zsh installed
-- Download completion file
-- Put it in `/usr/share/zsh/functions/Completion/Unix/`
-- Add in your zshrc file line
+# How to add completions for tools in my system?
 
-`compinit /usr/share/zsh/functions/Completion/Unix/*`
-- Source your zsh config file
+- Have `zsh` as your command interpreter and `oh-my-zsh` installed
+- Download completions files **(anywhere, but home directory is preferred)**
 
-## Screencasts how my completion working looks like (with fzf and fzf-tab plugins for zsh)
+```bash
+git clone https://github.com/rsherstnev/zshcompletions $HOME/zsh-custom-completions/
+```
 
-### Gobuster
-[![asciicast](https://asciinema.org/a/335775.svg)](https://asciinema.org/a/335775)
+- Put at the end of zsh config file your custom completions directory in the beginning of fpath variable and compinit function:
 
-### Wfuzz
-[![asciicast](https://asciinema.org/a/338885.svg)](https://asciinema.org/a/338885)
+```bash
+fpath=(
+    $HOME/zsh-custom-completions
+    $fpath
+)
+autoload -Uz compinit
+compinit
+```
 
-### Hashcat
-[![asciicast](https://asciinema.org/a/336061.svg)](https://asciinema.org/a/336061)
-
-### Sqlmap
-[![asciicast](https://asciinema.org/a/336070.svg)](https://asciinema.org/a/336070)
-
-### Msfvenom (payload options must be set last or completion will not work)
-[![asciicast](https://asciinema.org/a/336071.svg)](https://asciinema.org/a/336071)
+## Screencasts how my completion working looks like (with `fzf` tool installed and `fzf`, `fzf-tab` zsh plugins activated)
