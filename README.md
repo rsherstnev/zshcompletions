@@ -19,4 +19,4 @@ compinit
 ```
 
 ## Screencasts how my completion working looks like (with `fzf` tool installed and `fzf`, `fzf-tab` zsh plugins activated)
-https://github.com/rsherstnev/zshcompletions/assets/26627142/ca87abc3-a3f2-4159-8c80-bda70e675d6b
+https://github.com/rsherstnev/zshcompletions/assets/26627142/1093e880-2182-416e-a729-e99f8518f873
