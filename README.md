@@ -7,7 +7,7 @@
 git clone https://github.com/rsherstnev/zshcompletions $HOME/zsh-custom-completions/
 ```
 
-- Put at the end of zsh config file your custom completions directory in the beginning of fpath variable and compinit function:
+- Put at the end of zsh config file your custom completions directory in the beginning of `fpath` variable and `compinit` function:
 
 ```bash
 fpath=(
@@ -19,3 +19,4 @@ compinit
 ```
 
 ## Screencasts how my completion working looks like (with `fzf` tool installed and `fzf`, `fzf-tab` zsh plugins activated)
+https://github.com/rsherstnev/zshcompletions/assets/26627142/ca87abc3-a3f2-4159-8c80-bda70e675d6b
