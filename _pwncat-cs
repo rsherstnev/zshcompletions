@@ -1,0 +1,23 @@
+#compdef pwncat-cs pwncat-vl
+
+_arguments -s \
+    '(-h --help)'{-h,--help}'[Show this help message and exit]' \
+    '(-v --version)'{-v,--version}'[Show version number and exit]' \
+    '--download-plugins[Pre-download all Windows builtin plugins and exit immediately]' \
+    '(-c --config)'{-c,--config}'[Custom configuration file (default: ./pwncatrc)]:config file:_files' \
+    '--ssl[Connect or listen with SSL]' \
+    '--ssl-cert[Certificate for SSL-encrypted listeners (PEM)]:SSL certificate file:_files' \
+    '--ssl-key[Key for SSL-encrypted listeners (PEM)]:SSL key file:_files' \
+    '(-i --identity)'{-i,--identity}'[Private key for SSH authentication]:identity file:_files' \
+    '(-l --listen)'{-l,--listen}'[Enable the "bind" protocol (supports netcat-style syntax)]' \
+    '(-m --platform)'{-m,--platform}'[Name of the platform to use (default: linux)]:platform:(linux windows)' \
+    '(-p --port)'{-p,--port}'[Alternative way to specify port to support netcat-style syntax]:port:_ports' \
+    '--list[List installed implants with remote connection capability]' \
+    '(-V --verbose)'{-V,--verbose}'[Enable verbose output for the remote commands executed by "pwncat"]' \
+    '*::positional args:->args'
+
+case $state in
+    args)
+        _message 'Connection string ([protocol://][user[:password]@][host][:port]) or port'
+        ;;
+esac
