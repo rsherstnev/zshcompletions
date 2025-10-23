@@ -1,0 +1,47 @@
+#compdef wg-quick
+
+_wg-quick() {
+    local -a subcommands
+    subcommands=(
+        'up:Up tunnel'
+        'down:Down tunnel'
+    )
+
+    local state
+    _arguments \
+        '1: :->subcommand' \
+        '2: :->config' \
+        && return
+
+    case $state in
+        subcommand)
+            _describe 'subcommand' subcommands
+            ;;
+        config)
+            case $words[2] in
+                up)
+                    local -a config_files
+                    config_files=($(find /etc/wireguard -maxdepth 1 -name "*.conf" -type f 2>/dev/null | xargs -n1 basename 2>/dev/null | sed 's/\.conf$//' 2>/dev/null))
+                    
+                    if [[ -n $config_files ]]; then
+                        _describe 'config file' config_files
+                    else
+                        _message "No WireGuard configurations found in /etc/wireguard/"
+                    fi
+                    ;;
+                down)
+                    local -a active_interfaces
+                    active_interfaces=($(ip link show type wireguard 2>/dev/null | grep -o '^[0-9]\+: [^:]*' | cut -d' ' -f2 | sed 's/://' 2>/dev/null))
+                    
+                    if [[ -n $active_interfaces ]]; then
+                        _describe 'active interface' active_interfaces
+                    else
+                        _message "No active WireGuard interfaces found"
+                    fi
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+_wg-quick "$@"
